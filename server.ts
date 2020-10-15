@@ -53,20 +53,25 @@ interface IWord extends Document {
 interface IWordModel extends Model<IWord>{}
 let Words = model<IWord, IWordModel>('words', WordSchema)
 
+initDB();
+
 // Express App
 const app = express();
+app.set('port', process.env.PORT || 3000);
+
+//routes
+app.get('/', (req, res) => {
+  res.send(`App is running on port ${app.get('port')}`)
+});
+
 app.use('/words', async (req: Request, res: Response, next: NextFunction) => {
   try {
     let data = await Words.find();
-    return res.status(200).json({data: data});
+    return res.status(200).json(data);
   } catch(err) {
     return res.status(400).json(err);
   }
 });
-
-app.set('port', process.env.PORT || 3000);
-
-initDB();
 
 app.listen(app.get('port'), () => {
   console.log(`App running on port ${app.get('port')}`)

@@ -69,8 +69,14 @@ var WordSchema = new mongoose_1.Schema({
     contexto: { type: String }
 });
 var Words = mongoose_1.model('words', WordSchema);
+initDB();
 // Express App
 var app = express();
+app.set('port', process.env.PORT || 3000);
+//routes
+app.get('/', function (req, res) {
+    res.send("App is running on port " + app.get('port'));
+});
 app.use('/words', function (req, res, next) { return __awaiter(void 0, void 0, void 0, function () {
     var data, err_1;
     return __generator(this, function (_a) {
@@ -80,7 +86,7 @@ app.use('/words', function (req, res, next) { return __awaiter(void 0, void 0, v
                 return [4 /*yield*/, Words.find()];
             case 1:
                 data = _a.sent();
-                return [2 /*return*/, res.status(200).json({ data: data })];
+                return [2 /*return*/, res.status(200).json(data)];
             case 2:
                 err_1 = _a.sent();
                 return [2 /*return*/, res.status(400).json(err_1)];
@@ -88,8 +94,6 @@ app.use('/words', function (req, res, next) { return __awaiter(void 0, void 0, v
         }
     });
 }); });
-app.set('port', process.env.PORT || 3000);
-initDB();
 app.listen(app.get('port'), function () {
     console.log("App running on port " + app.get('port'));
 });
